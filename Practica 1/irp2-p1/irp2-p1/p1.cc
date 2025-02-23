@@ -16,7 +16,7 @@ Evaluations mreserve(uint32_t students, uint32_t subjects, etype_t v){
     //Reservar memoria para data
     evaluations.data = new student_t[evaluations.students];
         for(uint32_t i=0;i<students;i++){
-            evaluations.data[i]= new etype_t(subjects);
+            evaluations.data[i]= new etype_t[subjects];
 
             for(uint32_t j=0;j<subjects;j++){
                 evaluations.data[i][j] = v;
@@ -29,9 +29,9 @@ Evaluations mreserve(uint32_t students, uint32_t subjects, etype_t v){
 void mfree(Evaluations& e){
     if(e.data){
         for(uint32_t i=0;i<e.students;i++){
-            delete[] e.data[i];
+            delete e.data[i];
         }
-        delete[] e.data;
+        delete e.data;
     }
     e=empty_evaluations;
 
@@ -147,7 +147,7 @@ Evaluations filter(const Evaluations& m, const std::vector<uint32_t> &student_id
                 } 
             }
             if(!is_repeated){                     
-                subjects[i]=subject_idxs[i];
+                subjects[tamaño]=subject_idxs[i];
                 tamaño++;
             }
         }       
@@ -155,7 +155,7 @@ Evaluations filter(const Evaluations& m, const std::vector<uint32_t> &student_id
     subjects.resize(tamaño);
 
     //Ordenar los vectores 
-    int n = students.size();
+    int n = static_cast<uint32_t>(size(students));
     for (int i = 0; i < n - 1; ++i) {
         for (int j = 0; j < n - i - 1; ++j) {
             if (students[j] > students[j + 1]) {
@@ -164,7 +164,7 @@ Evaluations filter(const Evaluations& m, const std::vector<uint32_t> &student_id
         }
     }
 
-    n = subjects.size();
+    n = static_cast<uint32_t>(size(subjects));
     for (int i = 0; i < n - 1; ++i) {
         for (int j = 0; j < n - i - 1; ++j) {
             if (subjects[j] > subjects[j + 1]) {
@@ -177,7 +177,7 @@ Evaluations filter(const Evaluations& m, const std::vector<uint32_t> &student_id
     //Reservar memoria en filtrado para los estudiantes y asignaturas que se pidan
     estudiantes=static_cast<uint32_t>(size(students));
     asignaturas=static_cast<uint32_t>(size(subjects));
-    Evaluations filtrado = mreserve(estudiantes, asignaturas);
+    Evaluations filtrado = mreserve(estudiantes, asignaturas,0);
     
     //Que no exista ningun estudiante o asignatura que cumplan las condiciones
     if(subjects.empty() || students.empty()){
@@ -191,7 +191,6 @@ Evaluations filter(const Evaluations& m, const std::vector<uint32_t> &student_id
         }
 
     }
-    
     
 
     return filtrado;

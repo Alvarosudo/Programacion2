@@ -57,8 +57,8 @@ int main() {
     }
 
     // Ejemplo de filtrado de matriz (seleccionar estudiantes y asignaturas específicos)
-    std::vector<uint32_t> selected_students = {5};
-    std::vector<uint32_t> selected_subjects = {8};
+    std::vector<uint32_t> selected_students = {0,2};
+    std::vector<uint32_t> selected_subjects = {1,3};
     
     Evaluations filtered_evaluations = filter(evaluations, selected_students, selected_subjects);
 

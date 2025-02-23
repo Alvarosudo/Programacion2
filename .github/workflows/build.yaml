@@ -18,7 +18,7 @@ jobs:
       run: sudo apt-get update && sudo apt-get install -y valgrind gcc make  
 
     - name: Go to practica1  
-      run: cd "Practica1"/irp2-p1/irp2-p1
+      run: cd "Practica 1"/irp2-p1/irp2-p1
 
     - name: Build project  
       run: make  
