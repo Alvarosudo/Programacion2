@@ -1,0 +1,28 @@
+name: CI Build and Valgrind
+
+on:  
+  push:  
+    branches: [ main ]  
+  pull_request:  
+    branches: [ main ]  
+
+jobs:  
+  build-and-test:
+    runs-on: ubuntu-latest  # Use the latest Ubuntu runner
+    
+    steps:
+    - name: Checkout repository  
+      uses: actions/checkout@v4  
+
+    - name: Install dependencies  
+      run: sudo apt-get update && sudo apt-get install -y valgrind gcc make  
+
+    - name: Go to practica1  
+      run: cd "Practica1"/irp2-p1/irp2-p1
+
+    - name: Build project  
+      run: make  
+
+    - name: Run tests with Valgrind  
+      run: |
+        valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./mainp1.cc
