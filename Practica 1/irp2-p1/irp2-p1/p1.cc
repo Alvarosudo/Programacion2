@@ -111,92 +111,69 @@ Evaluations filter(const Evaluations& m, const std::vector<uint32_t> &student_id
 
     //Comprobar repetidos y eliminarlos
 
-    cout<<"[";
-    for(uint32_t i=0;i<student_idxs.size();i++){
-        cout<<" "<<student_idxs[i];
-    }
-    cout<<"]"<<endl;
-    cout<<"[";
-
-    for(uint32_t i=0;i<subject_idxs.size();i++){
-        cout<<" "<<subject_idxs[i];
-    }
-    cout<<"]"<<endl;
-
     bool is_repeated;
     etype_t tamaño=0;
     for(uint32_t i=0;i<student_idxs.size();i++){
         is_repeated=false;
-        if(i!=(student_idxs.size()-1)){
-            for(uint32_t j=(i+1);j<student_idxs.size();j++){
-                if(student_idxs[i]==student_idxs[j]){   
-                    is_repeated=true;
-                    break;
-                }
-            } 
-        }
-        if(!is_repeated){
-            cout<<"tamaño: "<<tamaño<<endl;
-            cout<<"numero a entrar: "<<student_idxs[i]<<endl;  
-                          
-            students[tamaño]=student_idxs[i];
-            tamaño++;
-        }       
+        if(student_idxs[i]<m.students){
+            if(i!=(student_idxs.size()-1)){
+                for(uint32_t j=(i+1);j<student_idxs.size();j++){
+                    if(student_idxs[i]==student_idxs[j]){   
+                        is_repeated=true;
+                        break;
+                    }
+                } 
+            }
+            if(!is_repeated){
+                            
+                students[tamaño]=student_idxs[i];
+                tamaño++;
+            }  
+        }     
     }
-    cout<<"tamaño students: "<<students.size()<<endl;
     
     students.resize(tamaño);
-    cout<<"tamaño students: "<<students.size()<<endl;
 
     tamaño=0;
     for(uint32_t i=0;i<subject_idxs.size();i++){
         is_repeated=false;
-        if(i!=(student_idxs.size()-1)){
-            for(uint32_t j=(i+1);j<subject_idxs.size();j++){
-                if(subject_idxs[i]==subject_idxs[j]){   
-                    is_repeated=true;
-                    break;
-                }
-            } 
-        }
-        if(!is_repeated){                     
-           subjects[i]=subject_idxs[i];
-            tamaño++;
+        if(subject_idxs[i]<m.subjects){
+            if(i!=(subject_idxs.size()-1)){
+                for(uint32_t j=(i+1);j<subject_idxs.size();j++){
+                    if(subject_idxs[i]==subject_idxs[j]){   
+                        is_repeated=true;
+                        break;
+                    }
+                } 
+            }
+            if(!is_repeated){                     
+                subjects[i]=subject_idxs[i];
+                tamaño++;
+            }
         }       
     }
     subjects.resize(tamaño);
+
+    //Ordenar los vectores 
+    int n = students.size();
+    for (int i = 0; i < n - 1; ++i) {
+        for (int j = 0; j < n - i - 1; ++j) {
+            if (students[j] > students[j + 1]) {
+                swap(students[j], students[j + 1]);
+            }
+        }
+    }
+
+    n = subjects.size();
+    for (int i = 0; i < n - 1; ++i) {
+        for (int j = 0; j < n - i - 1; ++j) {
+            if (subjects[j] > subjects[j + 1]) {
+                swap(subjects[j], subjects[j + 1]);
+            }
+        }
+    }
+
     
-    cout<<"[";
-    for(uint32_t i=0;i<students.size();i++){
-        cout<<" "<<students[i];
-    }
-    cout<<"]"<<endl;
-    cout<<"[";
-
-    for(uint32_t i=0;i<subjects.size();i++){
-        cout<<" "<<subjects[i];
-    }
-    cout<<"]"<<endl;
-
-
-
-
-    //Que no exista el estudiante
-    for(etype_t i=0;i<m.students;i++){
-        if(students[i]>=m.students){
-            students.erase(students.begin() +i);            
-        }
-    }
-
-    //Que no exista la asignatura
-    for(etype_t i=0;i<m.subjects;i++){
-        if(subjects[i]>=m.subjects){
-            subjects.erase(subjects.begin() +i);            
-        }
-    }
-
-
-
     //Reservar memoria en filtrado para los estudiantes y asignaturas que se pidan
     estudiantes=static_cast<uint32_t>(size(students));
     asignaturas=static_cast<uint32_t>(size(subjects));
@@ -204,7 +181,7 @@ Evaluations filter(const Evaluations& m, const std::vector<uint32_t> &student_id
     
     //Que no exista ningun estudiante o asignatura que cumplan las condiciones
     if(subjects.empty() || students.empty()){
-        filtrado= empty_evaluations;
+        return empty_evaluations;
     }else{
         //Copiar el vector valido en la matriz que se devuelve
         for(etype_t i=0;i<estudiantes;i++){
