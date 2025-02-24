@@ -1,4 +1,10 @@
+
+//DNI: 74389742Z
+//Quiles Ruiz, Álvaro Antonio 
+
 #include "p1.h"
+
+
 
 
 using namespace std;
@@ -29,9 +35,10 @@ Evaluations mreserve(uint32_t students, uint32_t subjects, etype_t v){
 void mfree(Evaluations& e){
     if(e.data){
         for(uint32_t i=0;i<e.students;i++){
-            delete e.data[i];
+            delete[] e.data[i];
         }
-        delete e.data;
+        delete[] e.data;
+        
     }
     e=empty_evaluations;
 

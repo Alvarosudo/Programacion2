@@ -19,8 +19,11 @@ jobs:
 
     - name: Go to practica1  
       run: cd "Practica 1"/irp2-p1/irp2-p1
+   
+    - name: LS  
+      run: ls -sla
 
-    - name: Build project  
+    - name: Build project
       run: make  
 
     - name: Run tests with Valgrind  
