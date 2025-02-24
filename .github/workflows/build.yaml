@@ -19,13 +19,11 @@ jobs:
 
     - name: Go to practica1  
       run: cd "Practica 1"/irp2-p1/irp2-p1
-   
-    - name: LS  
       run: ls -sla
-
-    - name: Build project
       run: make  
 
-    - name: Run tests with Valgrind  
+    - name: Run tests with Valgrind 
+      run: cd "Practica 1"/irp2-p1/irp2-p1 
       run: |
         valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./mainp1.cc
+      run: ls -sla
