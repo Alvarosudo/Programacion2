@@ -9,7 +9,7 @@ on:
 jobs:  
   build-and-test:
     runs-on: ubuntu-latest  # Use the latest Ubuntu runner
-    
+   
     steps:
     - name: Checkout repository  
       uses: actions/checkout@v4  
@@ -17,13 +17,14 @@ jobs:
     - name: Install dependencies  
       run: sudo apt-get update && sudo apt-get install -y valgrind gcc make  
 
-    - name: Go to practica1  
-      run: cd "Practica 1"/irp2-p1/irp2-p1
-      run: ls -sla
-      run: make  
-
-    - name: Run tests with Valgrind 
-      run: cd "Practica 1"/irp2-p1/irp2-p1 
+    - name: Build project  
       run: |
-        valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./mainp1.cc
-      run: ls -sla
+        cd "Practica 1"/irp2-p1/irp2-p1
+        ls -sla
+        make  
+
+    - name: Run tests with Valgrind
+      run: |
+        cd "Practica 1"/irp2-p1/irp2-p1
+        valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./mainp1
+        ls -sla
