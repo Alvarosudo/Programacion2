@@ -1,6 +1,6 @@
 
-//DNI: 74389742Z
-//Quiles Ruiz, Álvaro Antonio 
+//DIF: 74389742Z
+//NOMBRE:  QUILES RUIZ, ALVARO ANTONIO
 
 #include "p1.h"
 
