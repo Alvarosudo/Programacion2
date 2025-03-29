@@ -36,6 +36,9 @@ bool listInsert (ListPtr l, Element x, Position i){
     Position contador= 1;
     ListNodePtr ayuda;
     //Terminar condiciones
+    if(i<1){
+        return false;
+    }
     while(aux != nullptr ){
         if(contador == i){
             ayuda= aux;
@@ -102,6 +105,7 @@ bool listRemove (ListPtr l, Position p){
     if(p == 1){
         l->head=aux1->next;
         delete aux1;
+        return true;
     }
 
 

@@ -10,7 +10,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
   for (char c='g'; c >= 'a'; c--)
     listInsert (l, c, 1);
 
-  //listInsert (l, 'z', 1);
+  listInsert (l, 'z', 1);
 
   auto s = listToString (l,':');
   auto p = listLocate (l, 'e');
@@ -18,7 +18,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
 
   listMakeNull(l);
   delete l;
-  //std::cout << s;
+  std::cout << s;
 
   return r ? 0 : 1;
 }
