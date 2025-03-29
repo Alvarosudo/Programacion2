@@ -8,12 +8,6 @@ ListNodePtr listNodeCreate (Element e){
     return nodo;
 }
 
-/*std::string listNodeToString (ListNodePtr p) {
-    std::string s;
-    return s + p->key;
-  }
-  */
-
   
 ListPtr listCreate (){
     ListPtr lista = new List;
@@ -142,17 +136,8 @@ void listMakeNull (ListPtr l){
 ListNodePtr listFirst (ListPtr l){
     return l->head;
 }
-/*
-std::string listToString (ListPtr l, char c) {
-    std::string s;
-  
-    for (ListNodePtr n = l->head; n != nullptr; n = n->next)
-      s += c + listNodeToString (n);
-  
-    return s;
 
-}
-*/
+
 uint64_t listSize  (ListPtr l){
     uint64_t elementos= 0;
     ListNodePtr aux1= l->head;
