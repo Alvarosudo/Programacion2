@@ -15,6 +15,17 @@ while(PtrActual){
     fin
 }
 */
+//Funcion auxiliar para encontrar el mas pequeño
+
+TreeNodePtr& treeMenor (TreePtr t){
+    TreeNodePtr menor;
+    
+
+    return menor;
+}
+
+
+
 
 //Funciones de Tree Node
 
@@ -102,4 +113,36 @@ bool treeInsert (TreePtr t, Element x){
  
 bool treeRemove (TreePtr t, Element x){ 
 //Al eliminar un nodo, el elemento mas pequeño del subarbol derecho se convierte en el neuvo nodo
+    TreeNodePtr menor;
+    bool eliminado = true;
+
+    if(treeEmpty(t)){
+        return false; //Si el arbol esta vacio no hay nada que eliminar
+    }else{
+        if(t->root->key == x){ //Cuando encuentra el nodo con el elemento que es igual busca el menor
+            if(treeNodeIsLeaf(t->root)){//Si no tiene hijos se elimina
+                
+                delete t->root;
+
+            }
+            if(treeEmpty(&t->root->rights)){ //En caso que el nodo derecho no exista se copia el nodo izquierdo
+                t->root = t->root->lefts.root;
+
+            }else if(treeEmpty(&t->root->lefts)){ //En caso que el nodo izquierdo no exista se copia el nodo derecho
+                t->root = t->root->rights.root;
+
+            }else{
+                menor= treeMenor(&t->root->rights);
+                t->root= menor; //Copia el nodo, asi tambien copiara sus hijos apuntando a nullptr
+                delete menor; //Se elimina el nodo eliminado
+
+            }       
+        
+        }else if(t->root->key < x){ //Volvemos a iterar hasta llegar al nodo
+            eliminado = treeRemove(&t->root->lefts, x);
+        }else{
+            eliminado = treeRemove(&t->root->rights, x);
+        }
+    }
+    return eliminado;
 }
