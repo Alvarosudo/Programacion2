@@ -19,6 +19,11 @@ while(PtrActual){
 
 TreeNodePtr& treeMenor (TreePtr t){
     TreeNodePtr menor;
+    if(t->root->lefts.root != nullptr){
+        menor= treeMenor(&t->root->lefts);
+    }else{
+        menor= t->root;
+    }
     
 
     return menor;
@@ -29,10 +34,13 @@ TreeNodePtr& treeMenor (TreePtr t){
 
 //Funciones de Tree Node
 
-TreePtr treeCreate (){
-    TreePtr arbol= new Tree;
-    arbol->root=nullptr;
-    return arbol;
+
+TreeNodePtr  treeNodeCreate (Element e){
+
+    TreeNodePtr nodo= new TreeNode;
+    nodo->key=e;
+    return nodo;
+
 }
 
 TreePtr treeNodeLeftSibling  (TreeNodePtr p){
@@ -121,28 +129,132 @@ bool treeRemove (TreePtr t, Element x){
     }else{
         if(t->root->key == x){ //Cuando encuentra el nodo con el elemento que es igual busca el menor
             if(treeNodeIsLeaf(t->root)){//Si no tiene hijos se elimina
-                
+
+                t->root = nullptr;
                 delete t->root;
 
             }
             if(treeEmpty(&t->root->rights)){ //En caso que el nodo derecho no exista se copia el nodo izquierdo
+
+                TreeNodePtr aux= t->root;
                 t->root = t->root->lefts.root;
+                delete aux;
 
             }else if(treeEmpty(&t->root->lefts)){ //En caso que el nodo izquierdo no exista se copia el nodo derecho
-                t->root = t->root->rights.root;
 
-            }else{
-                menor= treeMenor(&t->root->rights);
-                t->root= menor; //Copia el nodo, asi tambien copiara sus hijos apuntando a nullptr
+                TreeNodePtr aux= t->root;
+                t->root = t->root->rights.root;
+                delete aux;
+
+            }else{ //Existen los dos nodos
+
+                menor= treeMenor(&t->root->rights); //Copia el nodo, asi tambien copiara sus hijos apuntando a nullptr
+                t->root->key = menor->key;
                 delete menor; //Se elimina el nodo eliminado
 
-            }       
+            }
         
         }else if(t->root->key < x){ //Volvemos a iterar hasta llegar al nodo
+
             eliminado = treeRemove(&t->root->lefts, x);
+
         }else{
+
             eliminado = treeRemove(&t->root->rights, x);
+
         }
     }
+
     return eliminado;
+}
+
+void treeMakeNull (TreePtr t){
+
+    if(t == nullptr || t->root == nullptr){// Arbol vacio o nulo
+        
+        return;
+
+    } 
+
+        treeMakeNull(&t->root->lefts);
+        treeMakeNull(&t->root->rights);
+        delete t->root;
+        //Para eliminar por completo el arbol se deberia eliminar tambien t
+
+}
+
+uint32_t treeSize (TreePtr t){ //El tamaño será 1(nodo padre)+ sus hijos
+
+    uint32_t tamano=1;
+    if(treeEmpty(t)){
+        tamano=0;
+    }else{
+        tamano += treeSize(&t->root->lefts) + treeSize(&t->root->rights);
+
+    }
+
+    return tamano;
+
+}
+
+uint32_t     treeHeight        (TreePtr t){
+    uint32_t altura;
+    if(treeEmpty(t)){
+        altura = 0;
+    }else{
+        if(treeHeight(&t->root->lefts) > treeHeight(&t->root->rights)){
+
+            altura = 1 + treeHeight(&t->root->lefts);
+        }else{
+            altura= 1 + treeHeight(&t->root->rights);
+        }
+    }
+
+    return altura;
+}
+
+
+uint32_t     treeLeafTreeNodes (TreePtr t){
+
+    uint32_t hojas= 0;
+
+    if(treeEmpty(t)){
+        hojas=0;
+    }else{
+        if(t->root->lefts.root == nullptr && t->root->rights.root ==nullptr){
+            hojas=1;
+        }else{
+            hojas += treeLeafTreeNodes(&t->root->lefts);
+            hojas += treeLeafTreeNodes(&t->root->rights);
+        }
+
+    }
+
+    return hojas;
+}
+
+
+TreeNodePtr  treeSearch (TreePtr t, Element x){
+    TreeNodePtr buscado;
+    if(treeEmpty(t)){
+        buscado =nullptr;
+    }else{
+        if(t->root->key == x){
+            buscado = t->root;
+        }else if(t->root->key > x){
+                buscado= treeSearch(&t->root->lefts, x);
+            }else if(t->root->key < x){
+
+                buscado= treeSearch(&t->root->rights, x);
+
+            }else{
+                buscado = nullptr;
+
+            }
+
+        
+    }
+
+    return buscado;
+
 }
