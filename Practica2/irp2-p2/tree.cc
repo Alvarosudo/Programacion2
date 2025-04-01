@@ -258,3 +258,144 @@ TreeNodePtr  treeSearch (TreePtr t, Element x){
     return buscado;
 
 }
+
+TreeNodePtr  treeParent        (TreePtr t, Element x){
+    TreeNodePtr padre;
+    TreePtr aux=t;
+    while(aux->root != nullptr){
+        if(aux->root == nullptr) {
+            padre= nullptr;
+            break;
+        }
+           
+    
+        if(x > aux->root->key ){
+            if(aux->root->rights.root->key == x){
+                return aux->root;
+            }
+            aux=&aux->root->rights;
+        }
+        if(x < aux->root->key ){
+            if(aux->root->lefts.root->key == x){
+                return aux->root;
+            }
+            aux=&aux->root->lefts;
+        }
+
+    }
+    
+    return padre;
+
+}
+
+TreeNodePtr  treeParent        (TreePtr t, TreeNodePtr p){
+    TreeNodePtr padre;
+    TreePtr aux=t;
+    while(aux->root != nullptr){
+        if(aux->root == nullptr) {
+            padre= nullptr;
+            break;
+        }
+           
+    
+        if(p > aux->root ){
+            if(aux->root->rights.root == p){
+                return aux->root;
+            }
+            aux=&aux->root->rights;
+        }
+        if(p < aux->root ){
+            if(aux->root->lefts.root == p){
+                return aux->root;
+            }
+            aux=&aux->root->lefts;
+        }
+
+    }
+    
+    return padre;
+
+}
+
+
+
+TreeNodePtr  treeMaximum       (TreePtr t){
+    TreeNodePtr mayor;
+    if(t->root->rights.root != nullptr){
+        mayor= treeMenor(&t->root->rights);
+    }else{
+        mayor= t->root;
+    }
+    
+
+    return mayor;
+}
+
+
+std::string  treePreOrder      (TreePtr t, char c){
+    std::string orden = "";
+    if(treeEmpty(t)){
+        orden= orden+ c+ t->root->key;
+        orden += treePreOrder(&(t->root->lefts), c);
+        orden += treePreOrder(&(t->root->rights), c);
+        
+    }
+    return orden;
+}
+
+
+std::string  treePostOrder     (TreePtr t, char c){
+    std::string postorder = "";
+
+    if(treeEmpty(t)){
+        postorder= treePostOrder(&(t->root->lefts),c);
+        postorder= treePostOrder(&(t->root->rights),c);
+        postorder= postorder+ c+ t->root->key;
+        
+    }
+
+
+    return postorder;
+
+}
+
+
+std::string  treeInOrder       (TreePtr t, char c){
+    std::string inorder = "";
+
+    if(treeEmpty(t)){
+        inorder= treePostOrder(&(t->root->lefts),c);
+        inorder= inorder+ c+ t->root->key;
+        inorder= treePostOrder(&(t->root->rights),c);
+        
+    }
+
+
+    return inorder;
+
+}
+
+
+std::string  treeByLevels      (TreePtr t, char c){
+    std::queue<TreeNodePtr> cola;
+    std::string porniveles = "";
+    TreeNodePtr aux;
+
+    if(!treeEmpty(t)){
+        cola.push(t->root);
+        while(cola.empty()){
+            aux= cola.front();
+            cola.pop();
+            porniveles= porniveles + c+ aux->key;
+            if(aux->lefts.root){
+                cola.push(aux->lefts.root);
+            }
+            if(aux->rights.root){
+                cola.push(aux->rights.root);
+            }
+
+        }
+
+    }
+    return porniveles;
+}
