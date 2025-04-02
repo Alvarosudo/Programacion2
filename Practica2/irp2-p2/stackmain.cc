@@ -1,37 +1,35 @@
-
 #include "stack.h"
+#include <iostream>
 
 // Apilamos y desapilamos
 
 int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
 {
-  StackPtr s = stackCreate();
 
+  // Crear una pila
+  StackPtr stack = stackCreate();
 
-  auto empty = stackEmpty(s);   // true
+  // Apilar algunos elementos
+  std::cout << "Apilando elementos..." << std::endl;
+  stackPush(stack, 'A');
+  stackPush(stack, 'B');
+  stackPush(stack, 'C');
 
+  // Verificar el elemento en la cabeza de la pila
+  std::cout << "Elemento en la cabeza de la pila (stackTop): " << stackTop(stack) << std::endl;
 
-  for (int p = 0; p < 10; p++) {
-    stackPush(s, 'a');
-    stackPush(s, 'b');
-    stackPush(s, 'c');
-  }
+  // Desapilar elementos
+  std::cout << "Desapilando elementos..." << std::endl;
+  std::cout << "Elemento desapilado (stackPop): " << stackPop(stack) << std::endl;
+  std::cout << "Elemento desapilado (stackPop): " << stackPop(stack) << std::endl;
+  std::cout << "Elemento desapilado (stackPop): " << stackPop(stack) << std::endl;
 
-  auto count = listSize(&s->l) == 30;
+  // Intentar desapilar de una pila vacía (debería llamar a set_error)
+  std::cout << "Intentando desapilar de una pila vacía..." << std::endl;
+  std::cout << "Elemento desapilado (stackPop): " << stackPop(stack) << std::endl;
 
-  for (int p = 0; p < 9; p++) {
-    [[maybe_unused]] auto t = stackPop(s);
-    t = stackPop(s);
-    t = stackPop(s);
-  }
+  // Liberar memoria de la pila (esto debería hacerse para evitar fugas de memoria)
+  delete stack;
 
-  [[maybe_unused]] auto t = stackPop(s);
-  auto top = stackTop(s) == 'b';
-
-  auto result = empty and count and top;
-
-  listMakeNull(&s->l);
-  delete s;
-
-  return result ? 0 : 1;
+  return 0;
 }

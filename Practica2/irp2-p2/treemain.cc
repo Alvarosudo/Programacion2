@@ -1,10 +1,10 @@
 #include "tree.h"
 
 void printTree(TreePtr t) {
-    std::cout << "Preorden: " << treePreOrder(t, ' ') << std::endl;
-    std::cout << "Inorden: " << treeInOrder(t, ' ') << std::endl;
-    std::cout << "Postorden: " << treePostOrder(t, ' ') << std::endl;
-    std::cout << "Por niveles: " << treeByLevels(t, ' ') << std::endl;
+    std::cout << "Preorden: " << treePreOrder(t, '-') << std::endl;
+    std::cout << "Inorden: " << treeInOrder(t, '-') << std::endl;
+    std::cout << "Postorden: " << treePostOrder(t, '-') << std::endl;
+    std::cout << "Por niveles: " << treeByLevels(t, '-') << std::endl;
     std::cout << "Altura: " << treeHeight(t) << std::endl;
     std::cout << "Tamaño: " << treeSize(t) << std::endl;
     std::cout << "Hojas: " << treeLeafTreeNodes(t) << std::endl;

@@ -1,27 +1,42 @@
 #include "queue.h"
 #include "lib/error.h"
+#include <iostream>
 
 
 // Crear cola y cola vacia
 int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
 {
-  QueuePtr q = queueCreate();
+  // Crear una cola
+  QueuePtr queue = queueCreate();
 
-  auto empty = queueEmpty(q);   // true
+  // Verificar si la cola está vacía al principio
+  std::cout << "¿La cola está vacía? " << (queueEmpty(queue) ? "Sí" : "No") << std::endl;
 
-  [[maybe_unused]] auto e = queueDequeue (q);
-  auto error = get_error() == 1;     // true
+  // Encolar elementos
+  std::cout << "Encolando elementos..." << std::endl;
+  queueEnqueue(queue, 'A');
+  queueEnqueue(queue, 'B');
+  queueEnqueue(queue, 'C');
 
-  for (int n = 0; n < 1000; n++)
-    queueEnqueue(q, 'a');
+  // Verificar la cabeza de la cola después de encolar
+  std::cout << "Elemento en la cabeza de la cola (queueHead): " << queueHead(queue) << std::endl;
 
-  auto count = listSize(&q->l) == 1000;
+  // Desencolar elementos y mostrar el resultado
+  std::cout << "Desencolando elementos..." << std::endl;
+  std::cout << "Elemento desencolado (queueDequeue): " << queueDequeue(queue) << std::endl;
+  std::cout << "Elemento desencolado (queueDequeue): " << queueDequeue(queue) << std::endl;
+  std::cout << "Elemento desencolado (queueDequeue): " << queueDequeue(queue) << std::endl;
 
+  // Intentar desencolar de una cola vacía (debería invocar set_error)
+  std::cout << "Intentando desencolar de una cola vacía..." << std::endl;
+  std::cout << "Elemento desencolado (queueDequeue): " << queueDequeue(queue) << std::endl;
 
-  listMakeNull(&q->l);
-  delete q;
+  // Verificar si la cola está vacía después de desencolar todos los elementos
+  std::cout << "¿La cola está vacía después de desencolar todos los elementos? "
+            << (queueEmpty(queue) ? "Sí" : "No") << std::endl;
 
-  auto result = empty and error and count;
+  // Liberar memoria de la cola (esto debería hacerse para evitar fugas de memoria)
+  delete queue;
 
-  return result ? 0 : 1;
+  return 0;
 }

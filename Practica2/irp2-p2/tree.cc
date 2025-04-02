@@ -20,15 +20,14 @@ while(PtrActual){
 //Funcion auxiliar para encontrar el mas pequeño
 
 TreeNodePtr& treeMenor (TreePtr t){
-    TreeNodePtr menor;
-    if(t->root->lefts.root != nullptr){
-        menor= treeMenor(&t->root->lefts);
-    }else{
-        menor= t->root;
+    
+    if (t->root->lefts.root != nullptr) {
+        return treeMenor(&t->root->lefts);  // Buscamos en el subárbol izquierdo
+    } else {
+        return t->root;  // Si no hay más hijos izquierdos, este es el menor
     }
     
 
-    return menor;
 }
 
 
@@ -102,7 +101,7 @@ bool treeInsert (TreePtr t, Element x){
     }else{
         if(t->root->key == x){
             return false; //Si el elemento ya existe devuelve falso
-        }else if(t->root->key < x){ //Si es mas pequeño lo envia hacia el lado izquierdo
+        }else if(t->root->key > x){ //Si es mas pequeño lo envia hacia el lado izquierdo
             if(t->root->lefts.root == nullptr){   
                 t->root->lefts.root = treeNodeCreate(x); //En caso de que no exista nodo lo creo
             }else{
@@ -336,10 +335,10 @@ TreeNodePtr  treeMaximum       (TreePtr t){
 
 std::string  treePreOrder      (TreePtr t, char c){
     std::string orden = "";
-    if(treeEmpty(t)){
-        orden= orden+ c+ t->root->key;
-        orden += treePreOrder(&(t->root->lefts), c);
-        orden += treePreOrder(&(t->root->rights), c);
+    if(!treeEmpty(t)){
+        orden= treeNodeToString(t->root);
+        orden +=c + treePreOrder(&t->root->lefts, c);
+        orden +=c + treePreOrder(&t->root->rights, c);
         
     }
     return orden;
@@ -349,9 +348,9 @@ std::string  treePreOrder      (TreePtr t, char c){
 std::string  treePostOrder     (TreePtr t, char c){
     std::string postorder = "";
 
-    if(treeEmpty(t)){
-        postorder= treePostOrder(&(t->root->lefts),c);
-        postorder= treePostOrder(&(t->root->rights),c);
+    if(!treeEmpty(t)){
+        postorder= treePostOrder(&t->root->lefts,c);
+        postorder= treePostOrder(&t->root->rights,c);
         postorder= postorder+ c+ t->root->key;
         
     }
@@ -365,10 +364,10 @@ std::string  treePostOrder     (TreePtr t, char c){
 std::string  treeInOrder       (TreePtr t, char c){
     std::string inorder = "";
 
-    if(treeEmpty(t)){
-        inorder= treePostOrder(&(t->root->lefts),c);
+    if(!treeEmpty(t)){
+        inorder= treePostOrder(&t->root->lefts,c);
         inorder= inorder+ c+ t->root->key;
-        inorder= treePostOrder(&(t->root->rights),c);
+        inorder= treePostOrder(&t->root->rights,c);
         
     }
 
