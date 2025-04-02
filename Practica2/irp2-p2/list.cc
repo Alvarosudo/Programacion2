@@ -1,4 +1,5 @@
-//list.cc
+// NIF: 74389742-Z
+// NOMBRE: QUILES RUIZ, ALVARO ANTONIO
 #include "list.h"
 
 ListNodePtr listNodeCreate (Element e){
