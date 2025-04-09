@@ -336,9 +336,9 @@ TreeNodePtr  treeMaximum       (TreePtr t){
 std::string  treePreOrder      (TreePtr t, char c){
     std::string orden = "";
     if(!treeEmpty(t)){
-        orden= treeNodeToString(t->root);
-        orden +=c + treePreOrder(&t->root->lefts, c);
-        orden +=c + treePreOrder(&t->root->rights, c);
+        orden= c + treeNodeToString(t->root);
+        orden += treePreOrder(&t->root->lefts, c);
+        orden += treePreOrder(&t->root->rights, c);
         
     }
     return orden;
