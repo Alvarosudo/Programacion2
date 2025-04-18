@@ -3,7 +3,33 @@
 
 #include "p3.h"
 
-Grid createGrid(uint32_t rows, uint32_t cols,float low_threshold, float high_threshold, uint32_t max_idle, float default_temp = 20.0f){
+
+//Declaracion de las alertas
+//Declarar de tipo static para que solo se cambie en p3.cc
+static high_temp_sig_t high_temp_signal;  
+static low_temp_sig_t low_temp_signal;
+static inactive_sensor_sig_t inactive_sensor_signal;
+
+// Funciones para acceder a las señales
+//Se devuelven referencias a las señales
+high_temp_sig_t& get_high_temp_signal() {
+    return high_temp_signal;  
+}
+
+low_temp_sig_t& get_low_temp_signal() {
+    return low_temp_signal;
+}
+
+inactive_sensor_sig_t& get_inactive_sensor_signal() {
+    return inactive_sensor_signal;
+}
+
+
+
+
+//Funciones a implementar
+
+Grid createGrid(uint32_t rows, uint32_t cols,float low_threshold, float high_threshold, uint32_t max_idle, float default_temp){
     //Comprobar que los valores son correctos
     if(high_threshold<= low_threshold){ //Coherencia que high > low
         return empty_grid;
@@ -70,17 +96,64 @@ void updateTemperature(Grid& grid, uint32_t row, uint32_t col, float new_temp){
 
 
 void simulateStep(Grid& grid){
+    for(uint32_t i=0; i<grid.rows;i++){
+        for(uint32_t j=0;j<grid.cols;j++){
+            if(grid.sensors[i][j].active == true){
 
+                grid.sensors[i][j].idle_cycles++;
+
+                if(grid.sensors[i][j].idle_cycles > grid.max_idle){
+                    grid.sensors[i][j].active = false;
+                    get_inactive_sensor_signal()(grid.sensors[i][j]);
+
+                }          
+            }
+        }
+    }
 }
 
 
 void triggerAlerts(Grid& grid){
+    for(uint32_t i=0; i<grid.rows;i++){
+        for(uint32_t j=0;j<grid.cols;j++){
+
+            if(grid.sensors[i][j].active == true){
+
+                if(grid.sensors[i][j].temperature < grid.low_threshold){
+                    get_low_temp_signal()(grid.sensors[i][j]);
+                }
+
+                if(grid.sensors[i][j].temperature > grid.high_threshold){
+                    get_high_temp_signal()(grid.sensors[i][j]);
+                }
+            }            
+            if(grid.sensors[i][j].active == false){
+                get_inactive_sensor_signal()(grid.sensors[i][j]);
+            }
+
+        }
+ 
+    }
 
 }
 
 
+
 bool swapSensors(Grid& grid, const Position& a, const Position& b){
-    bool swaped;
+    bool swaped = true;
+    Sensor aux=grid.sensors[a.row][a.col];
+
+    if(a.col > grid.cols || a.row > grid.rows || b.row >= grid.rows || b.col >= grid.cols){ //No se comprueba si son 0 pues es una posicion valida
+        return false;
+    }
+
+    grid.sensors[a.row][a.col] = grid.sensors[b.row][b.col];
+    grid.sensors[a.row][a.col].pos = a;
+    grid.sensors[b.row][b.col] = aux;
+    grid.sensors[b.row][b.col].pos = b;
+
+
+    
 
     return swaped;
 }
