@@ -36,48 +36,27 @@ void alert_inactive(const Sensor& s) {
               << ") is inactive after " << s.idle_cycles << " cycles\n";
 }
 
-int main() {
-    std::cout << std::fixed << std::setprecision(1); // Formateo global para poner 1 decimal en los decimales.
 
-    Grid grid = createGrid(3, 3, 10.0f, 30.0f, 2, 22.0f);
-
-    // Conectar señales
-    get_high_temp_signal().connect(alert_high_temp);
-    get_low_temp_signal().connect(alert_low_temp);
-    get_inactive_sensor_signal().connect(alert_inactive);
-
-    // Modificar temperaturas con decimales específicos
-    updateTemperature(grid, 0, 0, 25.866f);
-    updateTemperature(grid, 0, 1, 23.05f);
-    updateTemperature(grid, 0, 2, 21.12f);
-    updateTemperature(grid, 1, 0, 5.499f);   // por debajo del umbral (alerta baja)
-    updateTemperature(grid, 1, 1, 35.44f);   // por encima del umbral (alerta alta)
-
-    std::cout << "--- Initial Grid State ---\n";
-    displayGrid(grid);
-
-    // Simulación de pasos
-    for (int i = 0; i < 3; ++i) {
-        simulateStep(grid);
-        updateTemperature(grid, 0, 2, 21.12f+(float)i);
-    }
-
-    std::cout << "--- Triggering alerts manually ---\n";
-    triggerAlerts(grid);
-
-    std::cout << "--- Swapping two sensors ---\n";
-    Position a = {0, 0};
-    Position b = {0, 2};
-    if (swapSensors(grid, a, b)) {
-        std::cout << "Sensors swapped successfully.\n";
-    } else {
-        std::cout << "Invalid positions for swap.\n";
-    }
-
-    std::cout << "--- Final Grid State ---\n";
-    displayGrid(grid);
-
-    freeGrid(grid);
-    return 0;
+void handle_inactive(const Sensor& s) {
+    std::cout << "[TEST] Sensor (" << s.pos.row << "," << s.pos.col << ") inactivo\n";
+}
+void handle_high(const Sensor& s) {
+    std::cout << "[ALERTA] Alta temperatura: " << s.temperature << "°C\n";
+}
+void handle_low(const Sensor& s) {
+    std::cout << "[ALERTA] Baja temperatura: " << s.temperature << "°C\n";
 }
 
+int main() {
+    get_high_temp_signal().connect(handle_high);
+    get_low_temp_signal().connect(handle_low);
+
+    Grid g = createGrid(1, 2, 10.0f, 30.0f, 3);
+
+    updateTemperature(g, 0, 0, 5.0f);   // Debería lanzar baja
+    updateTemperature(g, 0, 1, 35.0f);  // Debería lanzar alta
+
+    triggerAlerts(g); // Lanza otra vez
+
+    return 0;
+}
