@@ -77,7 +77,7 @@ void treeDestroy (TreePtr t){
         treeDestroy(&t->root->rights); //Acceder recursivamente al subarbol derecho
         delete t->root; //Eliminar el nodo del subarbol
     }else{
-        delete t; //Elimina finalmente el arbol cuando ya no quedan hijos
+        t = nullptr; //Hace nulo el arbol cuando ya no quedan hijos
     }
 }
 

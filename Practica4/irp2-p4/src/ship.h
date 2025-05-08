@@ -15,11 +15,11 @@ namespace P4 {
       friend std::ostream &operator<<(std::ostream &os, const Ship& s);
 
       public:
-          Ship(char c, uint energy);
+          Ship(char c, uint energy); //Inicializar caracteres
           Ship() = delete;
           virtual ~Ship() = default;
 
-          void set_drawing_char(char c);
+          void set_drawing_char(char c); 
           char get_drawing_char() const;
 
           void set_in_mission(bool in_mission);

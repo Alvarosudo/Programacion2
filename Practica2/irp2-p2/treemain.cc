@@ -1,4 +1,5 @@
 #include "tree.h"
+using namespace std;
 
 void printTree(TreePtr t) {
     std::cout << "Preorden: " << treePreOrder(t, '-') << std::endl;
@@ -15,32 +16,24 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
 {
     TreePtr tree = treeCreate();
 
-    char elements[] = {'M', 'F', 'T', 'B', 'H', 'R', 'Z', 'A', 'D', 'G', 'I', 'P', 'U'};
-    int n = sizeof(elements) / sizeof(elements[0]);
-
-    std::cout << "Insertando elementos en el árbol...\n";
-    for (int i = 0; i < n; ++i) {
-        treeInsert(tree, elements[i]);
+    treeInsert(tree, 'A');
+    treeInsert(tree, 'D');
+    treeInsert(tree, 'H');
+    treeInsert(tree, 'C');
+    TreeNodePtr x=treeSearch(tree, 'C');
+    if(x != nullptr){
+        cout<<"No es nullptr"<<endl;
+    }else{
+        cout<<"Es nullptr"<<endl;
     }
 
-    std::cout << "Árbol tras inserciones:\n";
-    printTree(tree);
-
-    std::cout << "\nBuscando elementos en el árbol...\n";
-    char searchKeys[] = {'M', 'X', 'B', 'U'};
-    for (char key : searchKeys) {
-        TreeNodePtr found = treeSearch(tree, key);
-        std::cout << "Elemento " << key << (found ? " encontrado" : " no encontrado") << std::endl;
+    if(treeNodeIsLeaf(x)){
+        cout<<"Es hoja"<<endl;
+    }else{
+        cout<<"No es hoja"<<endl;
     }
-
-    std::cout << "\nEliminando nodos: B, T, M...\n";
-    treeRemove(tree, 'B');
-    treeRemove(tree, 'T');
-    treeRemove(tree, 'M');
-
-    std::cout << "Árbol tras eliminaciones:\n";
-    printTree(tree);
-
     treeDestroy(tree);
+
+
     return 0;
 }

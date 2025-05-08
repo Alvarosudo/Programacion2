@@ -5,6 +5,7 @@
 #include "xwing.h"
 #include "hangar.h"
 #include "deathstar.h"
+#include "ship.h"
 
 #include <iostream>
 #include <string>
