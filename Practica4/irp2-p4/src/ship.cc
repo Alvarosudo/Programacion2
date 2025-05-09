@@ -12,10 +12,10 @@ blanco->agregacion no tiene control de los objetos que contiene
 using namespace P4;
 
 
-mission_sig_t &get_mission_signal(){
-    static mission_sig_t mission_signal_t;
-    return mission_signal_t;
+mission_sig_t& Ship::get_mission_signal() {
+    return mission_sig;
 }
+
 
 Ship::Ship(char c, uint energy)
     : c(c), energy(energy) {}
@@ -51,9 +51,22 @@ void Ship::set_energy(uint energy){
 
 
 void Ship::reduce_energy(uint energy){
-    if(this->energy - energy <= 0){
+    
+    if(this->energy <= energy){
         this->energy = 0;
     }else{        
         this->energy -= energy;
     }
+
+}
+
+
+namespace P4{
+std::ostream& operator<<(std::ostream& os, const Ship& s) {
+    os << "Ship<" << s.get_drawing_char()
+       << ", energy: " << s.get_energy()
+       << ", in_mission: " << std::boolalpha << s.is_in_mission()
+       << ">";
+    return os;
+}
 }
