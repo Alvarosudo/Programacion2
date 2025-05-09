@@ -1,72 +1,43 @@
-
-
+#include <iostream>
 #include "tiefighter.h"
 #include "stardestroyer.h"
-#include "xwing.h"
-#include "hangar.h"
-#include "deathstar.h"
-#include "ship.h"
-
-#include <iostream>
-#include <string>
+#include "xwing.h"  // Incluye XWing
 
 using namespace P4;
 
-void mission_event(const Ship *s) {
-  std::cout << "Signal: Ship " << s->get_drawing_char() << " now has " << s->get_energy() << " energy.\n";
+// Función que se conectará a la señal de misión
+void on_mission(const ShipPtr s) {
+    std::cout << "[SEÑAL] Misión lanzada por nave:\n" << *s << "\n";
 }
 
 int main() {
-  // Crear la Estrella de la Muerte
-  DeathStar ds("Estrella de la Muerte");
+    // Crear instancias de naves
+    TIEFighter tf('T', 100);
+    StarDestroyer sd('S', 200);
+    XWing xw('X', 150);
 
-  // Crear hangares
-  HangarPtr h1 = new Hangar("Hangar I");
-  HangarPtr h2 = new Hangar("Hangar II");
-  HangarPtr h3 = new Hangar("Hangar III");
+    // Conectar señales
+    tf.get_mission_signal().connect(&on_mission);
+    sd.get_mission_signal().connect(&on_mission);
+    xw.get_mission_signal().connect(&on_mission);
 
-  // Añadir naves a los hangares
-  auto t1 = new TIEFighter('T', 100);
-  auto t2 = new TIEFighter('X', 100);
-  t1->get_mission_signal().connect(mission_event);
-  t2->get_mission_signal().connect(mission_event);
-  h1->add(t1);
-  h1->add(t2);
+    // Mostrar estado inicial
+    std::cout << "=== ESTADO INICIAL ===\n";
+    std::cout << tf << "\n";
+    std::cout << sd << "\n";
+    std::cout << xw << "\n";
 
-  auto d1 = new StarDestroyer('D', 500);
-  d1->get_mission_signal().connect(mission_event);
-  h2->add(d1);
+    // Ejecutar misiones
+    std::cout << "\n=== LANZANDO MISIONES ===\n";
+    tf.run_mission();
+    sd.run_mission();
+    xw.run_mission();
 
-  auto s1 = new XWing('W', 200);
-  s1->get_mission_signal().connect(mission_event);
-  h3->add(s1);
+    // Mostrar estado final
+    std::cout << "\n=== ESTADO FINAL ===\n";
+    std::cout << tf << "\n";
+    std::cout << sd << "\n";
+    std::cout << xw << "\n";
 
-  // Añadir hangares a la DeathStar
-  ds.add(h1);
-  ds.add(h2);
-  ds.add(h3);
-
-  // Mostrar estado inicial
-  std::cout << "======== ESTADO INICIAL ========\n";
-  std::cout << ds << "\n";
-
-  // Ejecutar misiones (eliminando naves de los hangares)
-  std::cout << "\n======== ENVIANDO NAVES A MISION ========\n";
-  ds.send_all_on_mission();
-
-  // Mostrar estado intermedio (naves fuera)
-  std::cout << "\n======== HANGARES VACIOS ========\n";
-  std::cout << ds << "\n";
-
-  // Recuperar naves a los hangares originales
-  std::cout << "\n======== ORDEN DE REGRESO A LOS HANGARES ========\n";
-  ds.recall_ship_to_hangar(t1, h1);
-  ds.recall_ship_to_hangar(t2, h1);
-  ds.recall_ship_to_hangar(d1, h2);
-
-  // Estado final
-  std::cout << "\n======== ESTADO FINAL ========\n";
-  std::cout << ds;
-
-  return 0;
+    return 0;
 }

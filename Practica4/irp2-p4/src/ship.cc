@@ -11,11 +11,14 @@ blanco->agregacion no tiene control de los objetos que contiene
 #include "ship.h"
 using namespace P4;
 
-static mission_sig_t mission_signal_t;
 
 mission_sig_t &get_mission_signal(){
+    static mission_sig_t mission_signal_t;
     return mission_signal_t;
 }
+
+Ship::Ship(char c, uint energy)
+    : c(c), energy(energy) {}
 
 void Ship::set_drawing_char(char c){
     this->c=c;
@@ -52,11 +55,5 @@ void Ship::reduce_energy(uint energy){
         this->energy = 0;
     }else{        
         this->energy -= energy;
-    }
-}
-
-void Ship::run_mission(){
-    if(!is_in_mission()){
-        reduce_energy(energy);
     }
 }
