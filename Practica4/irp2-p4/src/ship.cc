@@ -62,11 +62,11 @@ void Ship::reduce_energy(uint energy){
 
 
 namespace P4{
-std::ostream& operator<<(std::ostream& os, const Ship& s) {
-    os << "Ship<" << s.get_drawing_char()
-       << ", energy: " << s.get_energy()
-       << ", in_mission: " << std::boolalpha << s.is_in_mission()
-       << ">";
-    return os;
-}
+    std::ostream& operator<<(std::ostream& os, const Ship& s) {
+        os << "Ship<" << s.get_drawing_char()
+        << ", energy: " << s.get_energy()
+        << ", in_mission: " << std::boolalpha << s.is_in_mission()
+        << ">";
+        return os;
+    }
 }
