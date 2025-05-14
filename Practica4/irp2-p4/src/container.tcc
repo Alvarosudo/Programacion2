@@ -1,12 +1,11 @@
 // NIF: 74389742-Z
 // NOMBRE: QUILES RUIZ, ÁLVARO ANTONIO
 
-#include "container.h"
 
 using namespace P4;
 
 template <typename T>
-Container<T>::Container(const std::string& name="Container"): cname(name) {}
+Container<T>::Container(const std::string& name): cname(name) {}
 
 template <typename T>
 void Container<T>::set_name(const std::string& name){

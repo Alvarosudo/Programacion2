@@ -1,5 +1,5 @@
-#ifndef SHUTTLE_H
-#define SHUTTLE_H
+#ifndef XWING_H
+#define XWING_H
 
 #include "rebelship.h"
 
@@ -15,5 +15,4 @@ namespace P4 {
 
 } // namespace P4
 
-#endif /* SHUTTLE_H */
-
+#endif /* XWING_H */
